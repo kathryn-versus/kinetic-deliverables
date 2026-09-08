@@ -1,0 +1,632 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<style>:root{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Kinetic Originals &amp; Versioning</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
+<style>
+:root{
+  --ground:#F6F7F9; --surface:#FFFFFF; --surface2:#EDF0F4; --line:#D8DDE5; --line2:#C3CAD4;
+  --ink:#13171E; --ink2:#48515F; --ink3:#78818F;
+  --accent:#B0651A;
+  --c-original:#B0651A; --c-format:#2C6B70; --c-text:#43878C; --c-duration:#69A4A8; --c-ratio:#A2C3C6; --c-reuse:#AEB5C0;
+  --flag:#9A3B2E;
+  --shadow:0 1px 2px rgba(18,23,31,.05), 0 8px 24px -16px rgba(18,23,31,.18);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --ground:#0F1216; --surface:#161A20; --surface2:#1D232B; --line:#2A313B; --line2:#3A424E;
+  --ink:#ECEFF3; --ink2:#A3ACB9; --ink3:#727C8A;
+  --accent:#DE9647;
+  --c-original:#DE9647; --c-format:#4E9CA1; --c-text:#6BB2B6; --c-duration:#8AC3C6; --c-ratio:#7FA5A8; --c-reuse:#6A7381;
+  --flag:#D9705C;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}}
+:root[data-theme="dark"]{
+  --ground:#0F1216; --surface:#161A20; --surface2:#1D232B; --line:#2A313B; --line2:#3A424E;
+  --ink:#ECEFF3; --ink2:#A3ACB9; --ink3:#727C8A;
+  --accent:#DE9647;
+  --c-original:#DE9647; --c-format:#4E9CA1; --c-text:#6BB2B6; --c-duration:#8AC3C6; --c-ratio:#7FA5A8; --c-reuse:#6A7381;
+  --flag:#D9705C;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
+}
+*{box-sizing:border-box}
+body{
+  background:var(--ground); color:var(--ink);
+  font-family:"Archivo","Helvetica Neue",Arial,sans-serif;
+  font-size:15px; line-height:1.5; margin:0;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1280px; margin:0 auto; padding:40px 28px 80px}
+.mono{font-family:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace}
+.eyebrow{
+  font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:500;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--ink3);
+}
+h1{
+  font-size:clamp(30px,4.4vw,46px); font-weight:700; letter-spacing:-.022em;
+  line-height:1.06; margin:10px 0 0; text-wrap:balance; max-width:22ch;
+}
+.lede{max-width:66ch; color:var(--ink2); font-size:16.5px; line-height:1.58; margin:16px 0 0}
+.lede b{color:var(--ink); font-weight:600}
+h2{
+  font-size:12px; font-weight:600; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--ink3); margin:0 0 4px; font-family:"IBM Plex Mono",monospace;
+}
+.h2sub{color:var(--ink2); font-size:14.5px; max-width:70ch; margin:0 0 20px}
+section{margin-top:54px}
+hr.rule{border:0; border-top:1px solid var(--line); margin:0}
+
+/* ---- controls ---- */
+.controls{
+  display:flex; flex-wrap:wrap; gap:10px 26px; align-items:flex-end;
+  margin-top:32px; padding:16px 18px; background:var(--surface); border:1px solid var(--line);
+  border-radius:4px;
+}
+.ctl{display:flex; flex-direction:column; gap:7px}
+.ctl > span{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink3)}
+.seg{display:flex; border:1px solid var(--line2); border-radius:3px; overflow:hidden}
+.seg button{
+  font:inherit; font-size:13px; font-weight:500; padding:6px 13px; border:0; cursor:pointer;
+  background:transparent; color:var(--ink2); border-right:1px solid var(--line2);
+}
+.seg button:last-child{border-right:0}
+.seg button[aria-pressed="true"]{background:var(--ink); color:var(--ground)}
+.seg button:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
+
+/* ---- headline figures ---- */
+.figs{display:flex; flex-wrap:wrap; gap:0; margin-top:26px; border:1px solid var(--line); border-radius:4px; background:var(--surface); overflow:hidden}
+.fig{flex:1 1 150px; padding:18px 20px; border-right:1px solid var(--line)}
+.fig:last-child{border-right:0}
+.fig .n{font-size:32px; font-weight:700; letter-spacing:-.02em; line-height:1; font-variant-numeric:tabular-nums}
+.fig .n.acc{color:var(--accent)}
+.fig .l{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink3); margin-top:8px}
+
+/* ---- proportional bar ---- */
+.pbar{display:flex; height:38px; border-radius:3px; overflow:hidden; border:1px solid var(--line); background:var(--surface)}
+.pbar div{position:relative; min-width:2px; transition:flex-grow .35s ease}
+.pbar div span{
+  position:absolute; inset:0; display:flex; align-items:center; justify-content:center;
+  font-family:"IBM Plex Mono",monospace; font-size:11px; font-weight:600; color:var(--surface);
+}
+:root[data-theme="dark"] .pbar div span,
+:root:not([data-theme="light"]) .pbar div span{color:#0F1216}
+@media (prefers-color-scheme:light){:root:not([data-theme="dark"]) .pbar div span{color:#fff}}
+
+.legend{display:grid; gap:0; margin-top:14px; border:1px solid var(--line); border-radius:4px; background:var(--surface); overflow:hidden}
+.lrow{display:grid; grid-template-columns:132px 62px 62px 1fr; gap:14px; align-items:baseline; padding:11px 16px; border-top:1px solid var(--line)}
+.lrow:first-child{border-top:0}
+.lrow .sw{display:flex; align-items:center; gap:9px; font-weight:600; font-size:13.5px}
+.lrow .sw i{width:10px; height:10px; border-radius:2px; flex:0 0 auto}
+.lrow .ct{font-family:"IBM Plex Mono",monospace; font-weight:600; font-variant-numeric:tabular-nums; font-size:14px}
+.lrow .pc{font-family:"IBM Plex Mono",monospace; color:var(--ink3); font-variant-numeric:tabular-nums; font-size:12.5px}
+.lrow .ds{color:var(--ink2); font-size:13.5px; line-height:1.45}
+
+/* ---- root cards ---- */
+.roots{display:grid; grid-template-columns:repeat(auto-fill,minmax(268px,1fr)); gap:1px; background:var(--line); border:1px solid var(--line); border-radius:4px; overflow:hidden}
+.root{background:var(--surface); padding:16px 17px 15px; display:flex; flex-direction:column; gap:11px; cursor:pointer; border:0; text-align:left; font:inherit; color:inherit}
+.root:hover{background:var(--surface2)}
+.root:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
+.root.on{background:var(--surface2); box-shadow:inset 3px 0 0 var(--accent)}
+.rootfill{background:var(--surface)}
+.root .top{display:flex; justify-content:space-between; align-items:flex-start; gap:10px}
+.root .nm{font-weight:600; font-size:14.5px; letter-spacing:-.005em; line-height:1.25}
+.root .ch{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--ink3); margin-top:4px}
+.root .og{text-align:right; flex:0 0 auto}
+.root .og b{font-size:23px; font-weight:700; color:var(--accent); font-variant-numeric:tabular-nums; line-height:1}
+.root .og em{display:block; font-family:"IBM Plex Mono",monospace; font-style:normal; font-size:9.5px; letter-spacing:.09em; text-transform:uppercase; color:var(--ink3); margin-top:5px}
+.mini{display:flex; height:7px; border-radius:2px; overflow:hidden; background:var(--surface2)}
+.mini div{min-width:1px}
+.root .tot{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink2); display:flex; justify-content:space-between}
+
+/* ---- flags ---- */
+.flags{display:grid; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:4px; overflow:hidden}
+.flag{background:var(--surface); padding:15px 18px; display:grid; grid-template-columns:1fr auto; gap:6px 18px; align-items:baseline}
+.flag .q{font-weight:600; font-size:14.5px; letter-spacing:-.005em}
+.flag .a{color:var(--ink2); font-size:13.5px; line-height:1.5; grid-column:1; max-width:78ch}
+.flag .lines{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--flag); white-space:nowrap; grid-row:1; grid-column:2}
+
+/* ---- table ---- */
+.tbar{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:0 0 14px}
+.chip{
+  font:inherit; font-size:12px; font-weight:500; padding:5px 11px; border-radius:999px; cursor:pointer;
+  border:1px solid var(--line2); background:transparent; color:var(--ink2);
+  display:inline-flex; align-items:center; gap:7px;
+}
+.chip i{width:8px; height:8px; border-radius:2px}
+.chip[aria-pressed="true"]{border-color:var(--ink); background:var(--ink); color:var(--ground)}
+.chip:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+input[type="search"], select{
+  font:inherit; font-size:13px; padding:6px 10px; border:1px solid var(--line2); border-radius:3px;
+  background:var(--surface); color:var(--ink); min-width:170px;
+}
+.tscroll{overflow-x:auto; border:1px solid var(--line); border-radius:4px; background:var(--surface)}
+table{border-collapse:collapse; width:100%; min-width:1120px}
+th{
+  position:sticky; top:0; background:var(--surface2); z-index:1;
+  font-family:"IBM Plex Mono",monospace; font-size:10px; font-weight:600; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--ink3); text-align:left; padding:10px 12px;
+  border-bottom:1px solid var(--line2); white-space:nowrap;
+}
+td{padding:10px 12px; border-top:1px solid var(--line); vertical-align:top; font-size:13.5px}
+tbody tr:hover{background:var(--surface2)}
+td.id{font-family:"IBM Plex Mono",monospace; color:var(--ink3); font-variant-numeric:tabular-nums; font-size:12px}
+td.spec{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink2); white-space:nowrap}
+td.dl{font-weight:500; min-width:186px}
+td.dl small{display:block; color:var(--ink3); font-weight:400; font-size:12.5px; margin-top:2px}
+td.why{color:var(--ink2); font-size:12.5px; line-height:1.45; min-width:250px; max-width:400px}
+.tag{
+  display:inline-block; font-family:"IBM Plex Mono",monospace; font-size:10px; font-weight:600;
+  letter-spacing:.07em; padding:3px 7px; border-radius:2px; white-space:nowrap;
+}
+.st{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.05em; color:var(--ink3); white-space:nowrap}
+.st.ok{color:var(--c-format); font-weight:600}
+.count{font-family:"IBM Plex Mono",monospace; font-size:12px; color:var(--ink3); margin-left:auto}
+footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); color:var(--ink3); font-size:12.5px; max-width:78ch}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* ---- print / PDF export ---- */
+.printonly{display:none}
+.pbtn{
+  font:inherit; font-size:13px; font-weight:500; padding:6px 14px; cursor:pointer;
+  border:1px solid var(--line2); border-radius:3px; background:var(--surface); color:var(--ink);
+  display:inline-flex; align-items:center; gap:8px;
+}
+.pbtn:hover{background:var(--surface2)}
+.pbtn:focus-visible{outline:2px solid var(--accent); outline-offset:2px}
+.pbtn svg{width:13px; height:13px; flex:0 0 auto}
+.pnote{font-family:"IBM Plex Mono",monospace; font-size:10px; letter-spacing:.05em; color:var(--ink3); margin-top:6px}
+
+@media print{
+  :root, :root[data-theme="dark"], :root:not([data-theme="light"]){
+    --ground:#FFFFFF; --surface:#FFFFFF; --surface2:#F1F3F6; --line:#CBD2DC; --line2:#B3BCC8;
+    --ink:#0F1319; --ink2:#3F4855; --ink3:#6C7684;
+    --accent:#9C5714;
+    --c-original:#9C5714; --c-format:#245A5F; --c-text:#3A767B; --c-duration:#5E969A; --c-ratio:#9BBDC0; --c-reuse:#A7AFBA;
+    --flag:#8A3327;
+  }
+  @page{size:letter landscape; margin:.45in .5in}
+  body{background:#fff; font-size:9.5pt; -webkit-print-color-adjust:exact; print-color-adjust:exact}
+  .wrap{max-width:none; padding:0}
+  .controls, .tbar, .noprint{display:none!important}
+  .printonly{display:block!important}
+  .printonly.pmeta{display:flex!important}
+  .screenonly{display:none!important}
+  .eyebrow{font-size:7.5pt}
+  h1{font-size:25pt; max-width:none; margin-top:4pt}
+  .lede{font-size:9.6pt; max-width:none; margin-top:8pt}
+  .pmeta{
+    display:flex; flex-wrap:wrap; gap:4pt 20pt; margin-top:12pt; padding:8pt 0;
+    border-top:1px solid var(--line); border-bottom:1px solid var(--line);
+    font-family:"IBM Plex Mono",monospace; font-size:7.6pt; letter-spacing:.05em; text-transform:uppercase; color:var(--ink3);
+  }
+  .pmeta b{color:var(--ink); font-weight:600}
+  section{margin-top:20pt}
+  h2{font-size:8pt; margin-bottom:3pt}
+  .h2sub{font-size:8.8pt; max-width:none; margin-bottom:10pt}
+  .figs{break-inside:avoid}
+  .fig{padding:11pt 13pt}
+  .fig .n{font-size:19pt}
+  .fig .l{font-size:6.6pt; margin-top:5pt}
+  .pbar{height:22pt; break-inside:avoid}
+  .pbar div span{font-size:7.4pt; color:#fff!important}
+  .legend{break-inside:avoid}
+  .lrow{padding:6pt 11pt; grid-template-columns:104px 46px 44px 1fr; gap:10pt}
+  .lrow .sw{font-size:8.8pt} .lrow .ct{font-size:9pt} .lrow .pc{font-size:8pt} .lrow .ds{font-size:8.4pt}
+  .dual{margin-top:12pt; break-inside:avoid; border:1px solid var(--line); border-radius:3px; overflow:hidden}
+  .dual .dh{background:var(--surface2); padding:7pt 11pt; font-family:"IBM Plex Mono",monospace; font-size:7.4pt; letter-spacing:.1em; text-transform:uppercase; color:var(--ink2)}
+  .dual .dr{display:grid; grid-template-columns:1fr 92px 92px; gap:10pt; padding:5.5pt 11pt; border-top:1px solid var(--line); font-size:8.6pt; align-items:baseline}
+  .dual .dr.hd{font-family:"IBM Plex Mono",monospace; font-size:7pt; letter-spacing:.08em; text-transform:uppercase; color:var(--ink3)}
+  .dual .dr b{font-family:"IBM Plex Mono",monospace; font-variant-numeric:tabular-nums; font-weight:600}
+  .dual .dr .df{color:var(--accent)}
+  .roots{grid-template-columns:repeat(3,1fr)}
+  .root{break-inside:avoid; cursor:auto; padding:11pt 12pt; gap:8pt}
+  .root .nm{font-size:9.4pt} .root .ch{font-size:6.6pt} .root .og b{font-size:16pt} .root .og em{font-size:6.2pt}
+  .root .tot{font-size:7.6pt}
+  .root.on{box-shadow:none; background:var(--surface)}
+  .flag{break-inside:avoid; padding:9pt 12pt}
+  .flag .q{font-size:9.4pt} .flag .a{font-size:8.4pt; max-width:none} .flag .lines{font-size:7.2pt}
+  .tscroll{overflow:visible; border:0; border-radius:0}
+  table{min-width:0; width:100%}
+  thead{display:table-header-group}
+  th{position:static; background:var(--surface2)!important; font-size:6.4pt; padding:5pt 5pt; border-bottom:1px solid var(--line2)}
+  td{padding:4pt 5pt; font-size:7.5pt}
+  tr{break-inside:avoid}
+  tbody tr:hover{background:transparent}
+  td.id{font-size:6.8pt} td.spec{font-size:6.8pt}
+  td.dl{min-width:0} td.dl small{font-size:6.9pt}
+  td.why{max-width:none; min-width:0; font-size:7pt}
+  .tag{font-size:6pt; padding:1.5pt 4pt}
+  .st{font-size:6pt}
+  footer{margin-top:16pt; padding-top:9pt; font-size:7.4pt; max-width:none; break-inside:avoid}
+  .pagebreak{break-before:page}
+}
+
+@media(max-width:640px){
+  .wrap{padding:28px 16px 60px}
+  .lrow{grid-template-columns:1fr 54px; gap:6px 12px}
+  .lrow .pc{grid-column:2} .lrow .ds{grid-column:1/-1}
+}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+
+  <div class="eyebrow">Kinetic Platform · Master Deliverables</div>
+  <h1>Originals &amp; Versioning</h1>
+  <p class="lede">The 430-line master list is one <b>86-line asset matrix repeated verbatim across five campaigns</b> — the five blocks are structurally identical, so campaign is itself the outermost versioning layer. Inside those 86 lines sit <b>nine creative roots</b>. Everything else is a reframe, a copy swap, another render, a cutdown, or a duplicate.</p>
+
+  <div class="controls">
+    <label class="ctl"><span>Scope</span>
+      <span class="seg" id="segScope">
+        <button data-v="one" aria-pressed="true">One campaign · 86 lines</button>
+        <button data-v="all" aria-pressed="false">All five · 430 lines</button>
+      </span>
+    </label>
+    <label class="ctl"><span>Native ad images — unresolved</span>
+      <span class="seg" id="segNative">
+        <button data-v="lo" aria-pressed="true">4 images, 2 crops</button>
+        <button data-v="hi" aria-pressed="false">8 distinct images</button>
+      </span>
+    </label>
+    <label class="ctl"><span>Static version</span>
+      <button class="pbtn" id="exportBtn" title="Opens your browser print dialog — choose &quot;Save as PDF&quot;. Exports whichever scope is selected above.">
+        <svg viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 6V2.5h7V6"/><path d="M4.5 12H3a1 1 0 0 1-1-1V7a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-1.5"/><path d="M4.5 10h7v3.5h-7z"/></svg>
+        Export PDF
+      </button>
+      <span class="pnote">Prints the selected scope · filters are ignored</span>
+    </label>
+  </div>
+
+  <div class="printonly pmeta" id="pmeta"></div>
+
+  <div class="figs">
+    <div class="fig"><div class="n acc" id="fOrig">12</div><div class="l">Originals</div></div>
+    <div class="fig"><div class="n" id="fDeriv">54</div><div class="l">Version derivatives</div></div>
+    <div class="fig"><div class="n" id="fReuse">20</div><div class="l">Reuse — no new creative</div></div>
+    <div class="fig"><div class="n" id="fRoots">9</div><div class="l">Creative roots</div></div>
+    <div class="fig"><div class="n" id="fConf">3</div><div class="l">Lines confirmed in scope</div></div>
+  </div>
+
+  <section>
+    <h2>The split</h2>
+    <p class="h2sub">Ordered by production weight. Aspect-ratio work is the single largest category in the matrix — and one animated HTML5 build accounts for 20 of the 86 lines on its own.</p>
+    <div class="pbar" id="pbar"></div>
+    <div class="legend" id="legend"></div>
+    <div class="printonly dual" id="dual"></div>
+  </section>
+
+  <section>
+    <h2>Nine creative roots</h2>
+    <p class="h2sub">Each root is one thing that has to be made. The number is how many originals it needs; the bar is how many line items it generates.<span class="screenonly"> Click a root to filter the line list.</span></p>
+    <div class="roots" id="roots"></div>
+  </section>
+
+  <section>
+    <h2>What has to be resolved</h2>
+    <p class="h2sub">Line counts are per campaign — multiply by five for the full matrix.</p>
+    <div class="flags">
+      <div class="flag">
+        <div class="q">Only three lines in the entire matrix are confirmed</div>
+        <div class="lines">83 of 86 open</div>
+        <div class="a">The :30 CTV hero, the :15 cutdown and the :30 radio spot are marked CONFIRMED. Everything else is TO CONFIRM or EXPECTED / CONFIRM. This is a scoping hypothesis, not a scope — the version counts below move with every answer.</div>
+      </div>
+      <div class="flag">
+        <div class="q">Are the eight native ad images eight images, or four cropped twice?</div>
+        <div class="lines">4 lines · swings 4 originals</div>
+        <div class="a">Images 1–4 are listed at 1200x628 and images 5–8 at 1200x1200. The source says "TOTAL: 8 images" with no size split stated. Toggle the control above to see both readings. Campaign-wide this is the difference between 60 and 80 originals.</div>
+      </div>
+      <div class="flag">
+        <div class="q">Performance Max images are each listed at exactly one aspect ratio</div>
+        <div class="lines">4 lines</div>
+        <div class="a">PMax ingests every image across ratios; four images at one ratio each is not a deliverable set. Either the ratio coverage was flattened out of the source or the asset count is wrong. Resolve before this block is priced.</div>
+      </div>
+      <div class="flag">
+        <div class="q">YTTV offer assets are duplicated across Tier 2 and Tier 3</div>
+        <div class="lines">8 lines</div>
+        <div class="a">The source states YTTV assets are shared across tiers, yet Tier 2 and Tier 3 each carry a full set. The Tier 3 lines are the same files. Same pattern on price-point statics, which appear under both Traffic and Conversion Prospecting.</div>
+      </div>
+      <div class="flag">
+        <div class="q">Demand Gen 16:9 video is spec-identical to the CTV master and cutdown</div>
+        <div class="lines">2 lines</div>
+        <div class="a">:30 16:9 1920x1080 and :15 16:9 1920x1080 already exist as the hero and the cutdown. These are trafficking destinations, not deliverables — unless Demand Gen requires its own creative, which the source does not say.</div>
+      </div>
+      <div class="flag">
+        <div class="q">Source quantities contradict the line counts in three blocks</div>
+        <div class="lines">HTML5 · Native · Cart</div>
+        <div class="a">HTML5: three messaging ads listed, four versions stated, two versions per messaging. Single Image Demand Gen: three messages and four sizes listed, six images total stated. Cart: "3 TOTAL ADS" stated against six listed lines. Each needs a count and a mapping before build.</div>
+      </div>
+      <div class="flag">
+        <div class="q">Two originals may be zero net work</div>
+        <div class="lines">2 lines</div>
+        <div class="a">The YTTV sitelink copy is noted as repurposable from PMax, and the radio spot may derive from the film's audio bed rather than an independent write and mix. Confirm both — they are counted as originals here.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="pagebreak">
+    <h2>Every line, classified</h2>
+    <p class="h2sub">The <em>why</em> column is the reasoning behind each classification.<span class="screenonly"> Filter by class, root or channel to build a scope conversation around one block at a time.</span></p>
+    <div class="tbar" id="chips"></div>
+    <div class="tbar">
+      <select id="chanSel"><option value="">All channels</option></select>
+      <select id="rootSel"><option value="">All creative roots</option></select>
+      <input type="search" id="q" placeholder="Search deliverable, spec, note…">
+      <span class="count" id="tcount"></span>
+    </div>
+    <div class="tscroll">
+      <table>
+        <thead><tr id="thead"></tr></thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    Classification derived from <span class="mono">UPDATED Master Deliverables</span> (430 populated rows, 455 blank). Lifestyle imagery is modelled as one shared library feeding Demand Gen, Performance Max and native, per the source note that images may be reused between messages. Native ad image count deliberately left open; both readings are tabled above.
+  </footer>
+</div>
+
+<script id="payload" type="application/json">{"campaigns":["Everything Connected","Best Deal Today / Black Friday","Game Day / Big Game","January Fresh Start","Moving Day"],"ids":{"Everything Connected":[1,2,3,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,54,55,56,57,58,59,62,63,64,65,66,67,68,69,70,71,72,73,76,77,80,81,82,83,84,85,88,89,92,93,94,95,96,97,103,107],"Best Deal Today / Black Friday":[108,109,110,112,113,114,115,116,117,118,119,120,121,122,123,124,125,126,127,128,129,130,131,132,133,134,135,136,137,138,139,140,141,142,143,144,145,146,147,148,149,150,151,152,153,154,155,156,157,158,161,162,163,164,165,166,169,170,171,172,173,174,175,176,177,178,179,180,183,184,187,188,189,190,191,192,195,196,199,200,201,202,203,204,210,214],"Game Day / Big Game":[215,216,217,219,220,221,222,223,224,225,226,227,228,229,230,231,232,233,234,235,236,237,238,239,240,241,242,243,244,245,246,247,248,249,250,251,252,253,254,255,256,257,258,259,260,261,262,263,264,265,268,269,270,271,272,273,276,277,278,279,280,281,282,283,284,285,286,287,290,291,294,295,296,297,298,299,302,303,306,307,308,309,310,311,317,321],"January Fresh Start":[322,323,324,326,327,328,329,330,331,332,333,334,335,336,337,338,339,340,341,342,343,344,345,346,347,348,349,350,351,352,353,354,355,356,357,358,359,360,361,362,363,364,365,366,367,368,369,370,371,372,375,376,377,378,379,380,383,384,385,386,387,388,389,390,391,392,393,394,397,398,401,402,403,404,405,406,409,410,413,414,415,416,417,418,424,428],"Moving Day":[429,430,431,433,434,435,436,437,438,439,440,441,442,443,444,445,446,447,448,449,450,451,452,453,454,455,456,457,458,459,460,461,462,463,464,465,466,467,468,469,470,471,472,473,474,475,476,477,478,479,482,483,484,485,486,487,490,491,492,493,494,495,496,497,498,499,500,501,504,505,508,509,510,511,512,513,516,517,520,521,522,523,524,525,531,535]},"rows":[{"i":0,"ch":"CTV","dl":"Hero Spot","vr":"Master","du":":30","ar":"16:9","dm":"1920x1080","fm":"Video","st":"CONFIRMED","rt":"Hero Film","lo":"ORIGINAL","hi":"ORIGINAL","nt":"Anchor film. Only CONFIRMED line in the matrix, with the cutdown and radio.","sn":""},{"i":1,"ch":"CTV","dl":"Cutdown","vr":"Master","du":":15","ar":"16:9","dm":"1920x1080","fm":"Video","st":"CONFIRMED","rt":"Hero Film","lo":"DURATION","hi":"DURATION","nt":":15 cutdown from the :30 master.","sn":""},{"i":2,"ch":"Radio","dl":"Radio Spot","vr":"Master","du":":30","ar":"","dm":"","fm":"Audio","st":"CONFIRMED","rt":"Radio Spot","lo":"ORIGINAL","hi":"ORIGINAL","nt":"Separate medium (VO + mix). Confirm whether it derives from the film audio bed or is an independent write.","sn":""},{"i":3,"ch":"Seedtag","dl":"Display","vr":"Master","du":"","ar":"","dm":"587x330","fm":"Figma/PSD","st":"EXPECTED / CONFIRM","rt":"Seedtag Key Art","lo":"ORIGINAL","hi":"ORIGINAL","nt":"One display layout established at 587x330.","sn":"Confirm Seedtag Display applies to this campaign."},{"i":4,"ch":"Seedtag","dl":"Display","vr":"Master","du":"","ar":"","dm":"350x525","fm":"Figma/PSD","st":"EXPECTED / CONFIRM","rt":"Seedtag Key Art","lo":"RATIO","hi":"RATIO","nt":"Vertical, leaderboard and mobile-banner rebuilds. Layout work, not a simple crop \u2014 the proportions are unrelated.","sn":"Confirm Seedtag Display applies to this campaign."},{"i":5,"ch":"Seedtag","dl":"Display","vr":"Master","du":"","ar":"","dm":"587x100","fm":"Figma/PSD","st":"EXPECTED / CONFIRM","rt":"Seedtag Key Art","lo":"RATIO","hi":"RATIO","nt":"Vertical, leaderboard and mobile-banner rebuilds. Layout work, not a simple crop \u2014 the proportions are unrelated.","sn":"Confirm Seedtag Display applies to this campaign."},{"i":6,"ch":"Seedtag","dl":"Display","vr":"Master","du":"","ar":"","dm":"350x80","fm":"Figma/PSD","st":"EXPECTED / CONFIRM","rt":"Seedtag Key Art","lo":"RATIO","hi":"RATIO","nt":"Vertical, leaderboard and mobile-banner rebuilds. Layout work, not a simple crop \u2014 the proportions are unrelated.","sn":"Confirm Seedtag Display applies to this campaign."},{"i":7,"ch":"Seedtag","dl":"OLV","vr":"Master","du":":10 recommended","ar":"16:9","dm":"1920x1080","fm":"MP4/MOV ?4MB","st":"EXPECTED / CONFIRM","rt":"Hero Film","lo":"DURATION","hi":"DURATION","nt":"Seedtag OLV :10 at hero spec (16:9 1920x1080) \u2014 a further cutdown, not new creative.","sn":"Confirm Seedtag OLV applies to this campaign and whether any companion display-dimension assets are also required."},{"i":8,"ch":"YouTube / Demand Gen","dl":"Demand Gen Video","vr":":30 16:9","du":":30","ar":"16:9","dm":"1920x1080","fm":"Video","st":"EXPECTED / CONFIRM","rt":"Hero Film","lo":"REUSE","hi":"REUSE","nt":"Demand Gen :30 16:9 is spec-identical to the CTV master. Same file, second trafficking destination.","sn":"Confirm whether both :15 and :30 are required for this campaign; source says video can be :15/:30 CTV and quantity is '2 videos (per tier)'."},{"i":9,"ch":"YouTube / Demand Gen","dl":"Demand Gen Video","vr":":30 9:16","du":":30","ar":"9:16","dm":"1080x1920","fm":"Video","st":"EXPECTED / CONFIRM","rt":"Hero Film","lo":"RATIO","hi":"RATIO","nt":"Reframe of the :30 master.","sn":"Confirm whether both :15 and :30 are required for this campaign; source says video can be :15/:30 CTV and quantity is '2 videos (per tier)'."},{"i":10,"ch":"YouTube / Demand Gen","dl":"Demand Gen Video","vr":":30 1:1","du":":30","ar":"1:1","dm":"1080x1080","fm":"Video","st":"EXPECTED / CONFIRM","rt":"Hero Film","lo":"RATIO","hi":"RATIO","nt":"Reframe of the :30 master.","sn":"Confirm whether both :15 and :30 are required for this campaign; source says video can be :15/:30 CTV and quantity is '2 videos (per tier)'."},{"i":11,"ch":"YouTube / Demand Gen","dl":"Demand Gen Video","vr":":15 16:9","du":":15","ar":"16:9","dm":"1920x1080","fm":"Video","st":"EXPECTED / CONFIRM","rt":"Hero Film","lo":"REUSE","hi":"REUSE","nt":"Demand Gen :15 16:9 is spec-identical to the CTV cutdown.","sn":"Confirm whether both :15 and :30 are required for this campaign; source says video can be :15/:30 CTV and quantity is '2 videos (per tier)'."},{"i":12,"ch":"YouTube / Demand Gen","dl":"Demand Gen Video","vr":":15 9:16","du":":15","ar":"9:16","dm":"1080x1920","fm":"Video","st":"EXPECTED / CONFIRM","rt":"Hero Film","lo":"RATIO","hi":"RATIO","nt":"Reframe of the :15 cutdown.","sn":"Confirm whether both :15 and :30 are required for this campaign; source says video can be :15/:30 CTV and quantity is '2 videos (per tier)'."},{"i":13,"ch":"YouTube / Demand Gen","dl":"Demand Gen Video","vr":":15 1:1","du":":15","ar":"1:1","dm":"1080x1080","fm":"Video","st":"EXPECTED / CONFIRM","rt":"Hero Film","lo":"RATIO","hi":"RATIO","nt":"Reframe of the :15 cutdown.","sn":"Confirm whether both :15 and :30 are required for this campaign; source says video can be :15/:30 CTV and quantity is '2 videos (per tier)'."},{"i":14,"ch":"Programmatic","dl":"Single Image Demand Gen","vr":"Lifestyle Image","du":"","ar":"1.91:1","dm":"1200x628","fm":"Static","st":"TO CONFIRM","rt":"Lifestyle Library","lo":"REUSE","hi":"REUSE","nt":"Demand Gen draws the 1.91:1 library image.","sn":"Source lists 3 messaging ads and 4 required sizes, but states TOTAL: 6 images. Confirm exact image count, size mix, and messaging mapping."},{"i":15,"ch":"Programmatic","dl":"Single Image Demand Gen","vr":"Lifestyle Image","du":"","ar":"1:1","dm":"1200x1200","fm":"Static","st":"TO CONFIRM","rt":"Lifestyle Library","lo":"REUSE","hi":"REUSE","nt":"Demand Gen draws the 1:1 library image.","sn":"Source lists 3 messaging ads and 4 required sizes, but states TOTAL: 6 images. Confirm exact image count, size mix, and messaging mapping."},{"i":16,"ch":"Programmatic","dl":"Single Image Demand Gen","vr":"Lifestyle Image","du":"","ar":"4:5","dm":"960x1200","fm":"Static","st":"TO CONFIRM","rt":"Lifestyle Library","lo":"REUSE","hi":"REUSE","nt":"Demand Gen draws the 4:5 crop produced for PMax.","sn":"Source lists 3 messaging ads and 4 required sizes, but states TOTAL: 6 images. Confirm exact image count, size mix, and messaging mapping."},{"i":17,"ch":"Programmatic","dl":"Single Image Demand Gen","vr":"Lifestyle Image","du":"","ar":"9:16","dm":"1080x1920","fm":"Static","st":"TO CONFIRM","rt":"Lifestyle Library","lo":"RATIO","hi":"RATIO","nt":"9:16 crop \u2014 only line in the matrix requiring this ratio from the library.","sn":"Source lists 3 messaging ads and 4 required sizes, but states TOTAL: 6 images. Confirm exact image count, size mix, and messaging mapping."},{"i":18,"ch":"Programmatic","dl":"Performance Max","vr":"Lifestyle Image 1","du":"","ar":"1.91:1","dm":"1200x628","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Lifestyle Library","lo":"REUSE","hi":"REUSE","nt":"PMax draws library image at 1.91:1 already produced for native.","sn":"Confirm PMax applies to this campaign. Source states 8 images total and notes lifestyle images may be reused between messages."},{"i":19,"ch":"Programmatic","dl":"Performance Max","vr":"Lifestyle Image 2","du":"","ar":"1:1","dm":"1200x1200","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Lifestyle Library","lo":"REUSE","hi":"REUSE","nt":"PMax draws library image at 1:1 already produced for native.","sn":"Confirm PMax applies to this campaign. Source states 8 images total and notes lifestyle images may be reused between messages."},{"i":20,"ch":"Programmatic","dl":"Performance Max","vr":"Lifestyle Image 3","du":"","ar":"4:5","dm":"960x1200","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Lifestyle Library","lo":"RATIO","hi":"RATIO","nt":"4:5 crop for PMax. NOTE: each PMax image is listed at exactly one ratio \u2014 PMax normally ingests every image across ratios. Under-specified.","sn":"Confirm PMax applies to this campaign. Source states 8 images total and notes lifestyle images may be reused between messages."},{"i":21,"ch":"Programmatic","dl":"Performance Max","vr":"Lifestyle Image 4","du":"","ar":"4:5","dm":"960x1200","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Lifestyle Library","lo":"RATIO","hi":"RATIO","nt":"4:5 crop for PMax. NOTE: each PMax image is listed at exactly one ratio \u2014 PMax normally ingests every image across ratios. Under-specified.","sn":"Confirm PMax applies to this campaign. Source states 8 images total and notes lifestyle images may be reused between messages."},{"i":22,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 1","du":"","ar":"Varies","dm":"300x250","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"ORIGINAL","hi":"ORIGINAL","nt":"One animated build system. This root generates 20 of the 86 lines.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":23,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 1","du":"","ar":"Varies","dm":"728x90","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":24,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 1","du":"","ar":"Varies","dm":"320x50","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":25,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 1","du":"","ar":"Varies","dm":"160x600","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":26,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 1","du":"","ar":"Varies","dm":"300x600","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":27,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 2","du":"","ar":"Varies","dm":"300x250","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"TEXT","hi":"TEXT","nt":"Copy/offer swap inside the same build. Source conflict: 3 messaging ads listed but 4 versions stated.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":28,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 2","du":"","ar":"Varies","dm":"728x90","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":29,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 2","du":"","ar":"Varies","dm":"320x50","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":30,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 2","du":"","ar":"Varies","dm":"160x600","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":31,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 2","du":"","ar":"Varies","dm":"300x600","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":32,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 3","du":"","ar":"Varies","dm":"300x250","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"TEXT","hi":"TEXT","nt":"Copy/offer swap inside the same build. Source conflict: 3 messaging ads listed but 4 versions stated.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":33,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 3","du":"","ar":"Varies","dm":"728x90","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":34,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 3","du":"","ar":"Varies","dm":"320x50","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":35,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 3","du":"","ar":"Varies","dm":"160x600","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":36,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 3","du":"","ar":"Varies","dm":"300x600","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":37,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 4","du":"","ar":"Varies","dm":"300x250","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"TEXT","hi":"TEXT","nt":"Copy/offer swap inside the same build. Source conflict: 3 messaging ads listed but 4 versions stated.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":38,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 4","du":"","ar":"Varies","dm":"728x90","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":39,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 4","du":"","ar":"Varies","dm":"320x50","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":40,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 4","du":"","ar":"Varies","dm":"160x600","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":41,"ch":"Programmatic","dl":"HTML5 Banner","vr":"Version 4","du":"","ar":"Varies","dm":"300x600","fm":"HTML5","st":"TO CONFIRM","rt":"HTML5 Banner System","lo":"RATIO","hi":"RATIO","nt":"IAB size in the same build.","sn":"Source lists 3 messaging ads but states 4 versions total / 2 versions per messaging. Confirm which messages receive the four versions."},{"i":42,"ch":"Programmatic","dl":"Native Ad Image","vr":"Image 1","du":"","ar":"1.91:1","dm":"1200x628","fm":"Static","st":"TO CONFIRM","rt":"Lifestyle Library","lo":"ORIGINAL","hi":"ORIGINAL","nt":"Establishes a distinct library image at 1.91:1.","sn":"Source states TOTAL: 8 images and lists both 1200x628 and 1200x1200, but does not specify the exact size split/messaging mapping. Confirm."},{"i":43,"ch":"Programmatic","dl":"Native Ad Image","vr":"Image 2","du":"","ar":"1.91:1","dm":"1200x628","fm":"Static","st":"TO CONFIRM","rt":"Lifestyle Library","lo":"ORIGINAL","hi":"ORIGINAL","nt":"Establishes a distinct library image at 1.91:1.","sn":"Source states TOTAL: 8 images and lists both 1200x628 and 1200x1200, but does not specify the exact size split/messaging mapping. Confirm."},{"i":44,"ch":"Programmatic","dl":"Native Ad Image","vr":"Image 3","du":"","ar":"1.91:1","dm":"1200x628","fm":"Static","st":"TO CONFIRM","rt":"Lifestyle Library","lo":"ORIGINAL","hi":"ORIGINAL","nt":"Establishes a distinct library image at 1.91:1.","sn":"Source states TOTAL: 8 images and lists both 1200x628 and 1200x1200, but does not specify the exact size split/messaging mapping. Confirm."},{"i":45,"ch":"Programmatic","dl":"Native Ad Image","vr":"Image 4","du":"","ar":"1.91:1","dm":"1200x628","fm":"Static","st":"TO CONFIRM","rt":"Lifestyle Library","lo":"ORIGINAL","hi":"ORIGINAL","nt":"Establishes a distinct library image at 1.91:1.","sn":"Source states TOTAL: 8 images and lists both 1200x628 and 1200x1200, but does not specify the exact size split/messaging mapping. Confirm."},{"i":46,"ch":"Programmatic","dl":"Native Ad Image","vr":"Image 5","du":"","ar":"1:1","dm":"1200x1200","fm":"Static","st":"TO CONFIRM","rt":"Lifestyle Library","lo":"RATIO","hi":"ORIGINAL","nt":"OPEN: 1:1 crop of images 1-4, or four further distinct images. Source says \"TOTAL: 8 images\" without a size split.","sn":"Source states TOTAL: 8 images and lists both 1200x628 and 1200x1200, but does not specify the exact size split/messaging mapping. Confirm."},{"i":47,"ch":"Programmatic","dl":"Native Ad Image","vr":"Image 6","du":"","ar":"1:1","dm":"1200x1200","fm":"Static","st":"TO CONFIRM","rt":"Lifestyle Library","lo":"RATIO","hi":"ORIGINAL","nt":"OPEN: 1:1 crop of images 1-4, or four further distinct images. Source says \"TOTAL: 8 images\" without a size split.","sn":"Source states TOTAL: 8 images and lists both 1200x628 and 1200x1200, but does not specify the exact size split/messaging mapping. Confirm."},{"i":48,"ch":"Programmatic","dl":"Native Ad Image","vr":"Image 7","du":"","ar":"1:1","dm":"1200x1200","fm":"Static","st":"TO CONFIRM","rt":"Lifestyle Library","lo":"RATIO","hi":"ORIGINAL","nt":"OPEN: 1:1 crop of images 1-4, or four further distinct images. Source says \"TOTAL: 8 images\" without a size split.","sn":"Source states TOTAL: 8 images and lists both 1200x628 and 1200x1200, but does not specify the exact size split/messaging mapping. Confirm."},{"i":49,"ch":"Programmatic","dl":"Native Ad Image","vr":"Image 8","du":"","ar":"1:1","dm":"1200x1200","fm":"Static","st":"TO CONFIRM","rt":"Lifestyle Library","lo":"RATIO","hi":"ORIGINAL","nt":"OPEN: 1:1 crop of images 1-4, or four further distinct images. Source says \"TOTAL: 8 images\" without a size split.","sn":"Source states TOTAL: 8 images and lists both 1200x628 and 1200x1200, but does not specify the exact size split/messaging mapping. Confirm."},{"i":50,"ch":"Paid Social","dl":"Traffic Prospecting","vr":"Tier 2 Price Point - Static","du":"","ar":"4:5","dm":"1080x1350","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"ORIGINAL","hi":"ORIGINAL","nt":"Tier 2 price-point concept established as static 4:5.","sn":"Confirm Q3 Traffic Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":51,"ch":"Paid Social","dl":"Traffic Prospecting","vr":"Tier 2 Price Point - Static","du":"","ar":"9:16","dm":"1080x1920","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"RATIO","hi":"RATIO","nt":"9:16 reframe.","sn":"Confirm Q3 Traffic Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":52,"ch":"Paid Social","dl":"Traffic Prospecting","vr":"YTTV Offer - Animated GIF (Tier 2 use)","du":"Up to :15","ar":"4:5","dm":"1080x1350","fm":"Animated GIF","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 YTTV Offer","lo":"ORIGINAL","hi":"ORIGINAL","nt":"YTTV offer concept established as animated GIF 4:5.","sn":"Confirm Q3 Traffic Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":53,"ch":"Paid Social","dl":"Traffic Prospecting","vr":"YTTV Offer - Animated GIF (Tier 2 use)","du":"Up to :15","ar":"9:16","dm":"1080x1920","fm":"Animated GIF","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 YTTV Offer","lo":"RATIO","hi":"RATIO","nt":"9:16 reframe.","sn":"Confirm Q3 Traffic Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":54,"ch":"Paid Social","dl":"Traffic Prospecting","vr":"YTTV Offer - Image (Tier 2 use)","du":"","ar":"4:5","dm":"1080x1350","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 YTTV Offer","lo":"FORMAT","hi":"FORMAT","nt":"Static render of the same offer.","sn":"Confirm Q3 Traffic Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":55,"ch":"Paid Social","dl":"Traffic Prospecting","vr":"YTTV Offer - Image (Tier 2 use)","du":"","ar":"9:16","dm":"1080x1920","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 YTTV Offer","lo":"RATIO","hi":"RATIO","nt":"9:16 reframe.","sn":"Confirm Q3 Traffic Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":56,"ch":"Paid Social","dl":"Traffic Prospecting","vr":"Tier 3 Price Point - Static","du":"","ar":"4:5","dm":"1080x1350","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"TEXT","hi":"TEXT","nt":"Tier 3 price swap. Same creative, different number.","sn":"Confirm Q3 Traffic Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":57,"ch":"Paid Social","dl":"Traffic Prospecting","vr":"Tier 3 Price Point - Static","du":"","ar":"9:16","dm":"1080x1920","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"RATIO","hi":"RATIO","nt":"9:16 reframe.","sn":"Confirm Q3 Traffic Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":58,"ch":"Paid Social","dl":"Traffic Prospecting","vr":"YTTV Offer - Animated GIF (Tier 3 use)","du":"Up to :15","ar":"4:5","dm":"1080x1350","fm":"Animated GIF","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 YTTV Offer","lo":"REUSE","hi":"REUSE","nt":"Tier 3 duplicate. Source states YTTV assets are shared across tiers \u2014 no Tier 3 build exists.","sn":"Confirm Q3 Traffic Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":59,"ch":"Paid Social","dl":"Traffic Prospecting","vr":"YTTV Offer - Animated GIF (Tier 3 use)","du":"Up to :15","ar":"9:16","dm":"1080x1920","fm":"Animated GIF","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 YTTV Offer","lo":"REUSE","hi":"REUSE","nt":"Tier 3 duplicate. Source states YTTV assets are shared across tiers \u2014 no Tier 3 build exists.","sn":"Confirm Q3 Traffic Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":60,"ch":"Paid Social","dl":"Traffic Prospecting","vr":"YTTV Offer - Image (Tier 3 use)","du":"","ar":"4:5","dm":"1080x1350","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 YTTV Offer","lo":"REUSE","hi":"REUSE","nt":"Tier 3 duplicate. Source states YTTV assets are shared across tiers \u2014 no Tier 3 build exists.","sn":"Confirm Q3 Traffic Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":61,"ch":"Paid Social","dl":"Traffic Prospecting","vr":"YTTV Offer - Image (Tier 3 use)","du":"","ar":"9:16","dm":"1080x1920","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 YTTV Offer","lo":"REUSE","hi":"REUSE","nt":"Tier 3 duplicate. Source states YTTV assets are shared across tiers \u2014 no Tier 3 build exists.","sn":"Confirm Q3 Traffic Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":62,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"Tier 2 Price Point - Live Video","du":"Up to :15","ar":"4:5","dm":"1080x1350","fm":"Live Video","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"FORMAT","hi":"FORMAT","nt":"Live-video render of the price-point concept. Real edit labor.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":63,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"Tier 2 Price Point - Live Video","du":"Up to :15","ar":"9:16","dm":"1080x1920","fm":"Live Video","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"RATIO","hi":"RATIO","nt":"9:16 reframe.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":64,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"Tier 2 Price Point - Animated GIF","du":"Up to :15","ar":"4:5","dm":"1080x1350","fm":"Animated GIF","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"FORMAT","hi":"FORMAT","nt":"Animated GIF render of the price-point concept.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":65,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"Tier 2 Price Point - Animated GIF","du":"Up to :15","ar":"9:16","dm":"1080x1920","fm":"Animated GIF","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"RATIO","hi":"RATIO","nt":"9:16 reframe.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":66,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"Tier 2 Price Point - Static","du":"","ar":"4:5","dm":"1080x1350","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"REUSE","hi":"REUSE","nt":"Tier 2 static already delivered under Traffic Prospecting. Duplicate line.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":67,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"Tier 2 Price Point - Static","du":"","ar":"9:16","dm":"1080x1920","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"REUSE","hi":"REUSE","nt":"Tier 2 static already delivered under Traffic Prospecting. Duplicate line.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":68,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"YTTV Offer - Static (Tier 2 use)","du":"","ar":"4:5","dm":"1080x1350","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 YTTV Offer","lo":"REUSE","hi":"REUSE","nt":"Conversion Prospecting duplicate of the YTTV static already built for Traffic.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":69,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"YTTV Offer - Static (Tier 2 use)","du":"","ar":"9:16","dm":"1080x1920","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 YTTV Offer","lo":"REUSE","hi":"REUSE","nt":"Conversion Prospecting duplicate of the YTTV static already built for Traffic.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":70,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"Tier 3 Price Point - Live Video","du":"Up to :15","ar":"4:5","dm":"1080x1350","fm":"Live Video","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"TEXT","hi":"TEXT","nt":"Tier 3 price swap of the live-video / GIF render.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":71,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"Tier 3 Price Point - Live Video","du":"Up to :15","ar":"9:16","dm":"1080x1920","fm":"Live Video","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"RATIO","hi":"RATIO","nt":"9:16 reframe.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":72,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"Tier 3 Price Point - Animated GIF","du":"Up to :15","ar":"4:5","dm":"1080x1350","fm":"Animated GIF","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"TEXT","hi":"TEXT","nt":"Tier 3 price swap of the live-video / GIF render.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":73,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"Tier 3 Price Point - Animated GIF","du":"Up to :15","ar":"9:16","dm":"1080x1920","fm":"Animated GIF","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"RATIO","hi":"RATIO","nt":"9:16 reframe.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":74,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"Tier 3 Price Point - Static","du":"","ar":"4:5","dm":"1080x1350","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"REUSE","hi":"REUSE","nt":"Tier 3 static already delivered under Traffic Prospecting. Duplicate line.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":75,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"Tier 3 Price Point - Static","du":"","ar":"9:16","dm":"1080x1920","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 Price Point","lo":"REUSE","hi":"REUSE","nt":"Tier 3 static already delivered under Traffic Prospecting. Duplicate line.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":76,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"YTTV Offer - Static (Tier 3 use)","du":"","ar":"4:5","dm":"1080x1350","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 YTTV Offer","lo":"REUSE","hi":"REUSE","nt":"Conversion Prospecting duplicate of the YTTV static already built for Traffic.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":77,"ch":"Paid Social","dl":"Conversion Prospecting","vr":"YTTV Offer - Static (Tier 3 use)","du":"","ar":"9:16","dm":"1080x1920","fm":"Static","st":"EXPECTED / CONFIRM","rt":"Social \u00b7 YTTV Offer","lo":"REUSE","hi":"REUSE","nt":"Conversion Prospecting duplicate of the YTTV static already built for Traffic.","sn":"Confirm Q3 Conversion Prospecting structure applies to this campaign. YTTV assets are described as shared across tiers."},{"i":78,"ch":"Paid Social","dl":"Cart Retargeting","vr":"Live Video","du":"Up to :15","ar":"4:5","dm":"1080x1350","fm":"Live Video","st":"TO CONFIRM","rt":"Social \u00b7 Cart Retargeting","lo":"ORIGINAL","hi":"ORIGINAL","nt":"Cart concept established as live video 4:5. Source says \"3 TOTAL ADS\" but lists 6 lines.","sn":"Source says CART: 3 TOTAL ADS but lists 4 formats (Live Video, Animated GIF, Static). Confirm exact deliverables and whether both aspect ratios are required."},{"i":79,"ch":"Paid Social","dl":"Cart Retargeting","vr":"Live Video","du":"Up to :15","ar":"9:16","dm":"1080x1920","fm":"Live Video","st":"TO CONFIRM","rt":"Social \u00b7 Cart Retargeting","lo":"RATIO","hi":"RATIO","nt":"9:16 reframe.","sn":"Source says CART: 3 TOTAL ADS but lists 4 formats (Live Video, Animated GIF, Static). Confirm exact deliverables and whether both aspect ratios are required."},{"i":80,"ch":"Paid Social","dl":"Cart Retargeting","vr":"Animated GIF","du":"Up to :15","ar":"4:5","dm":"1080x1350","fm":"Animated GIF","st":"TO CONFIRM","rt":"Social \u00b7 Cart Retargeting","lo":"FORMAT","hi":"FORMAT","nt":"GIF / static render of the cart concept.","sn":"Source says CART: 3 TOTAL ADS but lists 4 formats (Live Video, Animated GIF, Static). Confirm exact deliverables and whether both aspect ratios are required."},{"i":81,"ch":"Paid Social","dl":"Cart Retargeting","vr":"Animated GIF","du":"Up to :15","ar":"9:16","dm":"1080x1920","fm":"Animated GIF","st":"TO CONFIRM","rt":"Social \u00b7 Cart Retargeting","lo":"RATIO","hi":"RATIO","nt":"9:16 reframe.","sn":"Source says CART: 3 TOTAL ADS but lists 4 formats (Live Video, Animated GIF, Static). Confirm exact deliverables and whether both aspect ratios are required."},{"i":82,"ch":"Paid Social","dl":"Cart Retargeting","vr":"Static","du":"","ar":"4:5","dm":"1080x1350","fm":"Static","st":"TO CONFIRM","rt":"Social \u00b7 Cart Retargeting","lo":"FORMAT","hi":"FORMAT","nt":"GIF / static render of the cart concept.","sn":"Source says CART: 3 TOTAL ADS but lists 4 formats (Live Video, Animated GIF, Static). Confirm exact deliverables and whether both aspect ratios are required."},{"i":83,"ch":"Paid Social","dl":"Cart Retargeting","vr":"Static","du":"","ar":"9:16","dm":"1080x1920","fm":"Static","st":"TO CONFIRM","rt":"Social \u00b7 Cart Retargeting","lo":"RATIO","hi":"RATIO","nt":"9:16 reframe.","sn":"Source says CART: 3 TOTAL ADS but lists 4 formats (Live Video, Animated GIF, Static). Confirm exact deliverables and whether both aspect ratios are required."},{"i":84,"ch":"Search","dl":"Brand Search","vr":"YouTube TV Sitelink","du":"","ar":"","dm":"","fm":"Sitelink Copy","st":"EXPECTED / CONFIRM","rt":"YTTV Sitelink Copy","lo":"ORIGINAL","hi":"ORIGINAL","nt":"Copy only. Source says it can be repurposed from PMax \u2014 may be zero net work.","sn":"Confirm Brand Search YTTV sitelink applies to this campaign; source says copy can be repurposed from PMax."},{"i":85,"ch":"Search","dl":"Non-Brand Search","vr":"YouTube TV Sitelink","du":"","ar":"","dm":"","fm":"Sitelink Copy","st":"EXPECTED / CONFIRM","rt":"YTTV Sitelink Copy","lo":"REUSE","hi":"REUSE","nt":"Non-brand reuses brand sitelink copy.","sn":"Confirm Non-Brand Search YTTV sitelink applies to this campaign; source says copy can be repurposed from PMax."}]}</script>
+<script>
+(function(){
+  var P = JSON.parse(document.getElementById('payload').textContent);
+  var ROWS = P.rows, CAMPS = P.campaigns, IDS = P.ids;
+
+  var ORDER = ['ORIGINAL','FORMAT','TEXT','DURATION','RATIO','REUSE'];
+  var META = {
+    ORIGINAL:{c:'--c-original', label:'Original',  d:'Net-new creative. Has to be conceived, shot, designed, built or written.'},
+    FORMAT:  {c:'--c-format',   label:'Format',    d:'Same concept rendered in another medium — live video, animated GIF, static. Real edit work.'},
+    TEXT:    {c:'--c-text',     label:'Messaging', d:'Copy or offer swap inside creative that already exists. Tier 3 price points, HTML5 versions 2–4.'},
+    DURATION:{c:'--c-duration', label:'Duration',  d:'Cutdown from a longer master. The :15 and the :10 OLV both come off the hero.'},
+    RATIO:   {c:'--c-ratio',    label:'Ratio',     d:'Reframe or resize of an existing asset. Largest category in the matrix.'},
+    REUSE:   {c:'--c-reuse',    label:'Reuse',     d:'No new creative. A duplicate line, or the same file trafficked to a second destination.'}
+  };
+  var css = getComputedStyle(document.documentElement);
+  function col(k){ return 'var(' + META[k].c + ')'; }
+
+  var state = { scope:'one', native:'lo', classes:{}, root:'', chan:'', q:'' };
+  ORDER.forEach(function(k){ state.classes[k] = true; });
+
+  function cls(r){ return state.native === 'lo' ? r.lo : r.hi; }
+  function mult(){ return state.scope === 'all' ? CAMPS.length : 1; }
+
+  /* ---------- flat row list for the table ---------- */
+  function flat(){
+    var out = [];
+    var camps = state.scope === 'all' ? CAMPS : [CAMPS[0]];
+    camps.forEach(function(c){
+      ROWS.forEach(function(r){
+        out.push({ r:r, camp:c, id:IDS[c][r.i] });
+      });
+    });
+    return out;
+  }
+
+  /* ---------- summary ---------- */
+  function counts(){
+    var m = {}; ORDER.forEach(function(k){ m[k]=0; });
+    ROWS.forEach(function(r){ m[cls(r)] += mult(); });
+    return m;
+  }
+
+  function renderSummary(){
+    var m = counts(), total = 0;
+    ORDER.forEach(function(k){ total += m[k]; });
+
+    var orig = m.ORIGINAL, reuse = m.REUSE, deriv = total - orig - reuse;
+    document.getElementById('fOrig').textContent  = orig;
+    document.getElementById('fDeriv').textContent = deriv;
+    document.getElementById('fReuse').textContent = reuse;
+    document.getElementById('fConf').textContent  = 3 * mult();
+
+    var bar = document.getElementById('pbar');
+    bar.innerHTML = '';
+    ORDER.forEach(function(k){
+      var d = document.createElement('div');
+      d.style.flexGrow = m[k]; d.style.flexBasis = '0';
+      d.style.background = col(k);
+      d.title = META[k].label + ' — ' + m[k] + ' lines';
+      if (m[k] / total > 0.055) { var s = document.createElement('span'); s.textContent = m[k]; d.appendChild(s); }
+      bar.appendChild(d);
+    });
+
+    var lg = document.getElementById('legend');
+    lg.innerHTML = '';
+    ORDER.forEach(function(k){
+      var row = document.createElement('div'); row.className = 'lrow';
+      row.innerHTML =
+        '<div class="sw"><i style="background:' + col(k) + '"></i>' + META[k].label + '</div>' +
+        '<div class="ct">' + m[k] + '</div>' +
+        '<div class="pc">' + (m[k] / total * 100).toFixed(0) + '%</div>' +
+        '<div class="ds">' + META[k].d + '</div>';
+      lg.appendChild(row);
+    });
+  }
+
+  /* ---------- roots ---------- */
+  function rootStats(){
+    var map = {}, order = [];
+    ROWS.forEach(function(r){
+      if (!map[r.rt]) { map[r.rt] = { name:r.rt, chans:{}, total:0, m:{} }; ORDER.forEach(function(k){ map[r.rt].m[k]=0; }); order.push(r.rt); }
+      var e = map[r.rt];
+      e.m[cls(r)] += mult(); e.total += mult(); e.chans[r.ch] = 1;
+    });
+    return order.map(function(n){ return map[n]; })
+                .sort(function(a,b){ return b.m.ORIGINAL - a.m.ORIGINAL || b.total - a.total; });
+  }
+
+  function renderRoots(){
+    var el = document.getElementById('roots'); el.innerHTML = '';
+    document.getElementById('fRoots').textContent = rootStats().length;
+    rootStats().forEach(function(s){
+      var b = document.createElement('button');
+      b.className = 'root' + (state.root === s.name ? ' on' : '');
+      b.setAttribute('aria-pressed', state.root === s.name);
+      var segs = ORDER.map(function(k){
+        return s.m[k] ? '<div style="flex-grow:' + s.m[k] + ';flex-basis:0;background:' + col(k) + '"></div>' : '';
+      }).join('');
+      var derived = s.total - s.m.ORIGINAL;
+      b.innerHTML =
+        '<div class="top"><div><div class="nm">' + s.name + '</div><div class="ch">' + Object.keys(s.chans).join(' · ') + '</div></div>' +
+        '<div class="og"><b>' + s.m.ORIGINAL + '</b><em>original' + (s.m.ORIGINAL === 1 ? '' : 's') + '</em></div></div>' +
+        '<div class="mini">' + segs + '</div>' +
+        '<div class="tot"><span>' + s.total + (s.total === 1 ? ' line item' : ' line items') + '</span><span>' + derived + ' derived</span></div>';
+      b.onclick = function(){ state.root = state.root === s.name ? '' : s.name; renderRoots(); syncSelects(); renderTable(); };
+      el.appendChild(b);
+    });
+    // fill trailing grid tracks so the 1px divider ground never reads as an empty panel
+    var per = Math.max(1, Math.floor(el.clientWidth / 269));
+    var gap = (per - (rootStats().length % per)) % per;
+    for (var i = 0; i < gap; i++) { var f = document.createElement('div'); f.className = 'rootfill'; f.setAttribute('aria-hidden','true'); el.appendChild(f); }
+  }
+  window.addEventListener('resize', function(){
+    clearTimeout(window.__rz); window.__rz = setTimeout(renderRoots, 150);
+  });
+
+  /* ---------- table ---------- */
+  var COLS = ['ID','Campaign','Channel','Deliverable','Spec','Format','Class','Status','Why this classification'];
+  function renderHead(){
+    document.getElementById('thead').innerHTML = COLS
+      .filter(function(c){ return c !== 'Campaign' || state.scope === 'all'; })
+      .map(function(c){ return '<th>' + c + '</th>'; }).join('');
+  }
+
+  function renderChips(){
+    var el = document.getElementById('chips'); el.innerHTML = '';
+    ORDER.forEach(function(k){
+      var b = document.createElement('button');
+      b.className = 'chip'; b.setAttribute('aria-pressed', state.classes[k]);
+      b.innerHTML = '<i style="background:' + col(k) + '"></i>' + META[k].label;
+      b.onclick = function(){ state.classes[k] = !state.classes[k]; b.setAttribute('aria-pressed', state.classes[k]); renderTable(); };
+      el.appendChild(b);
+    });
+  }
+
+  function syncSelects(){
+    var cs = document.getElementById('chanSel'), rs = document.getElementById('rootSel');
+    if (cs.options.length === 1) {
+      var seen = {};
+      ROWS.forEach(function(r){ if (!seen[r.ch]) { seen[r.ch] = 1; cs.add(new Option(r.ch, r.ch)); } });
+      var rseen = {};
+      ROWS.forEach(function(r){ if (!rseen[r.rt]) { rseen[r.rt] = 1; rs.add(new Option(r.rt, r.rt)); } });
+    }
+    rs.value = state.root; cs.value = state.chan;
+  }
+
+  function spec(r){
+    var p = [];
+    if (r.du) p.push(r.du);
+    if (r.ar) p.push(r.ar);
+    if (r.dm) p.push(r.dm);
+    return p.length ? p.join('  ·  ') : '—';
+  }
+
+  function renderTable(){
+    renderHead();
+    var rows = flat().filter(function(o){
+      var k = cls(o.r);
+      if (!state.classes[k]) return false;
+      if (state.root && o.r.rt !== state.root) return false;
+      if (state.chan && o.r.ch !== state.chan) return false;
+      if (state.q) {
+        var hay = (o.id + ' ' + o.camp + ' ' + o.r.ch + ' ' + o.r.dl + ' ' + o.r.vr + ' ' + spec(o.r) + ' ' + o.r.fm + ' ' + o.r.nt + ' ' + o.r.sn).toLowerCase();
+        if (hay.indexOf(state.q.toLowerCase()) === -1) return false;
+      }
+      return true;
+    });
+
+    document.getElementById('tcount').textContent = rows.length + ' of ' + (ROWS.length * mult()) + ' lines';
+
+    var html = rows.map(function(o){
+      var r = o.r, k = cls(r);
+      var tag = '<span class="tag" style="background:color-mix(in srgb,' + col(k) + ' 18%,transparent);color:' + col(k) + '">' + META[k].label.toUpperCase() + '</span>';
+      var st = r.st === 'CONFIRMED'
+        ? '<span class="st ok">CONFIRMED</span>'
+        : '<span class="st">' + r.st + '</span>';
+      return '<tr>' +
+        '<td class="id">' + o.id + '</td>' +
+        (state.scope === 'all' ? '<td>' + o.camp + '</td>' : '') +
+        '<td>' + r.ch + '</td>' +
+        '<td class="dl">' + r.dl + '<small>' + r.vr + '</small></td>' +
+        '<td class="spec">' + spec(r) + '</td>' +
+        '<td class="spec">' + r.fm + '</td>' +
+        '<td>' + tag + '</td>' +
+        '<td>' + st + '</td>' +
+        '<td class="why">' + r.nt + '</td>' +
+      '</tr>';
+    }).join('');
+    document.getElementById('tbody').innerHTML = html ||
+      '<tr><td colspan="9" style="padding:26px 14px;color:var(--ink3)">No lines match these filters.</td></tr>';
+  }
+
+  /* ---------- wiring ---------- */
+  function seg(id, key, after){
+    document.getElementById(id).addEventListener('click', function(e){
+      var b = e.target.closest('button'); if (!b) return;
+      state[key] = b.dataset.v;
+      [].forEach.call(this.children, function(c){ c.setAttribute('aria-pressed', c === b); });
+      after();
+    });
+  }
+  seg('segScope', 'scope', function(){ renderSummary(); renderRoots(); renderTable(); renderPrintMeta(); });
+  seg('segNative', 'native', function(){ renderSummary(); renderRoots(); renderTable(); renderPrintMeta(); });
+
+  document.getElementById('chanSel').onchange = function(){ state.chan = this.value; renderTable(); };
+  document.getElementById('rootSel').onchange = function(){ state.root = this.value; renderRoots(); renderTable(); };
+  document.getElementById('q').oninput = function(){ state.q = this.value; renderTable(); };
+
+  /* ---------- print / PDF export ---------- */
+  function renderPrintMeta(){
+    var m = counts(), total = 0; ORDER.forEach(function(k){ total += m[k]; });
+    var scopeLabel = state.scope === 'all'
+      ? 'All five campaigns · 430 line items'
+      : 'One campaign · 86 line items · structure repeats identically across all five';
+    document.getElementById('pmeta').innerHTML =
+      '<span>Scope <b>' + scopeLabel + '</b></span>' +
+      '<span>Classified under <b>' + (state.native === 'lo' ? '4 native images, 2 crops each' : '8 distinct native images') + '</b></span>' +
+      '<span>Originals <b>' + m.ORIGINAL + '</b></span>' +
+      '<span>Generated <b>' + new Date().toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'}) + '</b></span>';
+
+    // both readings side by side — the toggle can't travel into a static file
+    var lo = {}, hi = {}; ORDER.forEach(function(k){ lo[k]=0; hi[k]=0; });
+    ROWS.forEach(function(r){ lo[r.lo] += mult(); hi[r.hi] += mult(); });
+    var rows = ORDER.map(function(k){
+      var diff = lo[k] !== hi[k];
+      return '<div class="dr"><span>' + META[k].label + '</span>' +
+             '<b' + (diff ? ' class="df"' : '') + '>' + lo[k] + '</b>' +
+             '<b' + (diff ? ' class="df"' : '') + '>' + hi[k] + '</b></div>';
+    }).join('');
+    document.getElementById('dual').innerHTML =
+      '<div class="dh">Unresolved: the native ad image count moves four lines between Original and Ratio</div>' +
+      '<div class="dr hd"><span>Class</span><span>4 images, 2 crops</span><span>8 distinct images</span></div>' +
+      rows;
+  }
+
+  var saved = null;
+  window.__printPrep = function(){
+    saved = { classes:JSON.parse(JSON.stringify(state.classes)), root:state.root, chan:state.chan, q:state.q };
+    ORDER.forEach(function(k){ state.classes[k] = true; });
+    state.root = ''; state.chan = ''; state.q = '';
+    renderChips(); syncSelects(); renderRoots(); renderPrintMeta(); renderTable();
+  };
+  window.__printRestore = function(){
+    if (!saved) return;
+    state.classes = saved.classes; state.root = saved.root; state.chan = saved.chan; state.q = saved.q;
+    document.getElementById('q').value = saved.q;
+    saved = null;
+    renderChips(); syncSelects(); renderRoots(); renderTable();
+  };
+  window.addEventListener('beforeprint', window.__printPrep);
+  window.addEventListener('afterprint', window.__printRestore);
+  document.getElementById('exportBtn').onclick = function(){ window.__printPrep(); window.print(); };
+
+  renderSummary(); renderRoots(); renderChips(); syncSelects(); renderTable(); renderPrintMeta();
+})();
+</script>
+
+</body>
+</html>
