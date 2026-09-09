@@ -11,7 +11,7 @@
   --ground:#F6F7F9; --surface:#FFFFFF; --surface2:#EDF0F4; --line:#D8DDE5; --line2:#C3CAD4;
   --ink:#13171E; --ink2:#48515F; --ink3:#78818F;
   --accent:#B0651A;
-  --c-original:#B0651A; --c-format:#2C6B70; --c-text:#43878C; --c-duration:#69A4A8; --c-ratio:#A2C3C6; --c-reuse:#AEB5C0;
+  --c-original:#B0651A; --c-format:#175A61; --c-text:#35797F; --c-duration:#6DAEB3; --c-ratio:#9CC5C8; --c-reuse:#8A8078;
   --flag:#9A3B2E;
   --shadow:0 1px 2px rgba(18,23,31,.05), 0 8px 24px -16px rgba(18,23,31,.18);
 }
@@ -19,7 +19,7 @@
   --ground:#0F1216; --surface:#161A20; --surface2:#1D232B; --line:#2A313B; --line2:#3A424E;
   --ink:#ECEFF3; --ink2:#A3ACB9; --ink3:#727C8A;
   --accent:#DE9647;
-  --c-original:#DE9647; --c-format:#4E9CA1; --c-text:#6BB2B6; --c-duration:#8AC3C6; --c-ratio:#7FA5A8; --c-reuse:#6A7381;
+  --c-original:#DE9647; --c-format:#2E888F; --c-text:#55ABB1; --c-duration:#86C9CD; --c-ratio:#BFE2E4; --c-reuse:#A79C90;
   --flag:#D9705C;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
 }}
@@ -27,7 +27,7 @@
   --ground:#0F1216; --surface:#161A20; --surface2:#1D232B; --line:#2A313B; --line2:#3A424E;
   --ink:#ECEFF3; --ink2:#A3ACB9; --ink3:#727C8A;
   --accent:#DE9647;
-  --c-original:#DE9647; --c-format:#4E9CA1; --c-text:#6BB2B6; --c-duration:#8AC3C6; --c-ratio:#7FA5A8; --c-reuse:#6A7381;
+  --c-original:#DE9647; --c-format:#2E888F; --c-text:#55ABB1; --c-duration:#86C9CD; --c-ratio:#BFE2E4; --c-reuse:#A79C90;
   --flag:#D9705C;
   --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.7);
 }
@@ -57,6 +57,30 @@ h2{
 .h2sub{color:var(--ink2); font-size:14.5px; max-width:70ch; margin:0 0 20px}
 section{margin-top:54px}
 hr.rule{border:0; border-top:1px solid var(--line); margin:0}
+
+
+/* ---- campaign strip ---- */
+.camps{
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(196px,1fr)); gap:1px;
+  margin-top:26px; background:var(--line); border:1px solid var(--line); border-radius:4px; overflow:hidden;
+}
+.camp{
+  background:var(--surface); padding:13px 15px; border:0; font:inherit; color:inherit; text-align:left;
+  cursor:pointer; display:flex; flex-direction:column; gap:5px;
+}
+.camp:hover{background:var(--surface2)}
+.camp:focus-visible{outline:2px solid var(--accent); outline-offset:-2px}
+.camp .cn{font-weight:600; font-size:13.5px; line-height:1.25; letter-spacing:-.005em}
+.camp .cm{font-family:"IBM Plex Mono",monospace; font-size:10.5px; color:var(--ink3); letter-spacing:.04em}
+.camp.on{background:var(--surface2); box-shadow:inset 0 2px 0 var(--accent)}
+.camp.on .cn{color:var(--accent)}
+.camp[aria-disabled="true"]{cursor:default}
+.camp[aria-disabled="true"]:hover{background:var(--surface)}
+.campshdr{
+  display:flex; flex-wrap:wrap; gap:4px 14px; align-items:baseline; margin-top:34px;
+}
+.campshdr h2{margin:0}
+.campshdr .hint{font-size:13px; color:var(--ink3)}
 
 /* ---- controls ---- */
 .controls{
@@ -119,6 +143,7 @@ hr.rule{border:0; border-top:1px solid var(--line); margin:0}
 .mini{display:flex; height:7px; border-radius:2px; overflow:hidden; background:var(--surface2)}
 .mini div{min-width:1px}
 .root .tot{font-family:"IBM Plex Mono",monospace; font-size:11.5px; color:var(--ink2); display:flex; justify-content:space-between}
+
 
 /* ---- flags ---- */
 .flags{display:grid; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:4px; overflow:hidden}
@@ -183,7 +208,7 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
     --ground:#FFFFFF; --surface:#FFFFFF; --surface2:#F1F3F6; --line:#CBD2DC; --line2:#B3BCC8;
     --ink:#0F1319; --ink2:#3F4855; --ink3:#6C7684;
     --accent:#9C5714;
-    --c-original:#9C5714; --c-format:#245A5F; --c-text:#3A767B; --c-duration:#5E969A; --c-ratio:#9BBDC0; --c-reuse:#A7AFBA;
+    --c-original:#9C5714; --c-format:#14525A; --c-text:#2F7178; --c-duration:#63A6AB; --c-ratio:#96C0C3; --c-reuse:#7E756D;
     --flag:#8A3327;
   }
   @page{size:letter landscape; margin:.45in .5in}
@@ -205,6 +230,13 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
   section{margin-top:20pt}
   h2{font-size:8pt; margin-bottom:3pt}
   .h2sub{font-size:8.8pt; max-width:none; margin-bottom:10pt}
+  .camps{grid-template-columns:repeat(5,1fr)}
+  .camp{padding:8pt 10pt; cursor:auto}
+  .camp .cn{font-size:8.8pt} .camp .cm{font-size:6.8pt}
+  .camp.on{box-shadow:none; background:var(--surface)}
+  .camp.on .cn{color:var(--ink)}
+  .campshdr{margin-top:16pt}
+  .campshdr .hint{font-size:8.4pt}
   .figs{break-inside:avoid}
   .fig{padding:11pt 13pt}
   .fig .n{font-size:19pt}
@@ -258,6 +290,12 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
   <div class="eyebrow">Kinetic Platform · Master Deliverables</div>
   <h1>Originals &amp; Versioning</h1>
   <p class="lede">The 430-line master list is one <b>86-line asset matrix repeated verbatim across five campaigns</b> — the five blocks are structurally identical, so campaign is itself the outermost versioning layer. Inside those 86 lines sit <b>nine creative roots</b>. Everything else is a reframe, a copy swap, another render, a cutdown, or a duplicate.</p>
+
+  <div class="campshdr">
+    <h2>Five campaign flights</h2>
+    <span class="hint" id="campHint"></span>
+  </div>
+  <div class="camps" id="camps"></div>
 
   <div class="controls">
     <label class="ctl"><span>Scope</span>
@@ -388,7 +426,7 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
   var css = getComputedStyle(document.documentElement);
   function col(k){ return 'var(' + META[k].c + ')'; }
 
-  var state = { scope:'one', native:'lo', classes:{}, root:'', chan:'', q:'' };
+  var state = { scope:'one', native:'lo', camp:0, classes:{}, root:'', chan:'', q:'' };
   ORDER.forEach(function(k){ state.classes[k] = true; });
 
   function cls(r){ return state.native === 'lo' ? r.lo : r.hi; }
@@ -397,13 +435,41 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
   /* ---------- flat row list for the table ---------- */
   function flat(){
     var out = [];
-    var camps = state.scope === 'all' ? CAMPS : [CAMPS[0]];
+    var camps = state.scope === 'all' ? CAMPS : [CAMPS[state.camp]];
     camps.forEach(function(c){
       ROWS.forEach(function(r){
         out.push({ r:r, camp:c, id:IDS[c][r.i] });
       });
     });
     return out;
+  }
+
+  /* ---------- campaign strip ---------- */
+  function renderCamps(){
+    var el = document.getElementById('camps'); el.innerHTML = '';
+    var all = state.scope === 'all';
+    document.getElementById('campHint').textContent = all
+      ? 'All five in view — 86 line items each, 430 in total. The blocks are structurally identical.'
+      : 'Structurally identical, so one stands for all five. Pick the flight whose IDs you want to work in.';
+    CAMPS.forEach(function(name, i){
+      var ids = IDS[name];
+      var b = document.createElement('button');
+      b.className = 'camp' + ((all || i === state.camp) ? ' on' : '');
+      b.setAttribute('aria-pressed', all || i === state.camp);
+      if (all) b.setAttribute('aria-disabled', 'true');
+      b.innerHTML = '<span class="cn">' + name + '</span>' +
+                    '<span class="cm">ID ' + ids[0] + '–' + ids[ids.length - 1] + '  ·  86 lines</span>';
+      b.onclick = function(){
+        if (state.scope === 'all') { state.scope = 'one'; syncScopeButtons(); }
+        state.camp = i;
+        renderCamps(); renderSummary(); renderRoots(); renderPrintMeta(); renderTable();
+      };
+      el.appendChild(b);
+    });
+  }
+  function syncScopeButtons(){
+    var seg = document.getElementById('segScope');
+    [].forEach.call(seg.children, function(c){ c.setAttribute('aria-pressed', c.dataset.v === state.scope); });
   }
 
   /* ---------- summary ---------- */
@@ -446,6 +512,7 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
       lg.appendChild(row);
     });
   }
+
 
   /* ---------- roots ---------- */
   function rootStats(){
@@ -572,7 +639,7 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
       after();
     });
   }
-  seg('segScope', 'scope', function(){ renderSummary(); renderRoots(); renderTable(); renderPrintMeta(); });
+  seg('segScope', 'scope', function(){ renderCamps(); renderSummary(); renderRoots(); renderTable(); renderPrintMeta(); });
   seg('segNative', 'native', function(){ renderSummary(); renderRoots(); renderTable(); renderPrintMeta(); });
 
   document.getElementById('chanSel').onchange = function(){ state.chan = this.value; renderTable(); };
@@ -583,8 +650,8 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
   function renderPrintMeta(){
     var m = counts(), total = 0; ORDER.forEach(function(k){ total += m[k]; });
     var scopeLabel = state.scope === 'all'
-      ? 'All five campaigns · 430 line items'
-      : 'One campaign · 86 line items · structure repeats identically across all five';
+      ? 'All five flights · 430 line items'
+      : CAMPS[state.camp] + ' · 86 line items · structure repeats identically across all five flights';
     document.getElementById('pmeta').innerHTML =
       '<span>Scope <b>' + scopeLabel + '</b></span>' +
       '<span>Classified under <b>' + (state.native === 'lo' ? '4 native images, 2 crops each' : '8 distinct native images') + '</b></span>' +
@@ -624,7 +691,7 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
   window.addEventListener('afterprint', window.__printRestore);
   document.getElementById('exportBtn').onclick = function(){ window.__printPrep(); window.print(); };
 
-  renderSummary(); renderRoots(); renderChips(); syncSelects(); renderTable(); renderPrintMeta();
+  renderCamps(); renderSummary(); renderRoots(); renderChips(); syncSelects(); renderTable(); renderPrintMeta();
 })();
 </script>
 
