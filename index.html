@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<style>:root{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<style>:root{color-scheme:light dark}body{margin:0}img{max-width:100%}</style>
 <title>Kinetic Originals &amp; Versioning</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap">
 <style>
@@ -151,6 +151,26 @@ hr.rule{border:0; border-top:1px solid var(--line); margin:0}
 .flag .q{font-weight:600; font-size:14.5px; letter-spacing:-.005em}
 .flag .a{color:var(--ink2); font-size:13.5px; line-height:1.5; grid-column:1; max-width:78ch}
 .flag .lines{font-family:"IBM Plex Mono",monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--flag); white-space:nowrap; grid-row:1; grid-column:2}
+.fstat{font-family:"IBM Plex Mono",monospace; font-size:9.5px; font-weight:600; letter-spacing:.09em;
+  text-transform:uppercase; padding:3px 7px; border-radius:2px; margin-right:9px; white-space:nowrap;
+  display:inline-block; vertical-align:2px}
+.fstat.ok{background:color-mix(in srgb,var(--c-format) 16%,transparent); color:var(--c-format)}
+.fstat.part{background:color-mix(in srgb,var(--accent) 18%,transparent); color:var(--accent)}
+.fstat.open{background:color-mix(in srgb,var(--flag) 16%,transparent); color:var(--flag)}
+.fstat.new{background:color-mix(in srgb,var(--c-text) 16%,transparent); color:var(--c-format)}
+.flag .fres{grid-column:1; color:var(--ink2); font-size:13.5px; line-height:1.5; max-width:78ch;
+  border-left:2px solid var(--c-format); padding-left:12px; margin-top:2px}
+.flag .fres b{color:var(--ink); font-weight:600}
+.flag .spec{margin-top:7px; padding:8px 11px; background:var(--surface2); border-radius:3px;
+  font-family:"IBM Plex Mono",monospace; font-size:11.5px; line-height:1.6; color:var(--ink); max-width:78ch}
+.flag .src{display:block; margin-top:6px; font-family:"IBM Plex Mono",monospace; font-size:10.5px;
+  color:var(--ink3); letter-spacing:.02em}
+.updnote{margin-top:20px; padding:13px 16px; background:var(--surface); border:1px solid var(--line);
+  border-left:3px solid var(--c-format); border-radius:4px; font-size:13.8px; line-height:1.55;
+  color:var(--ink2); max-width:92ch}
+.updnote b{color:var(--ink); font-weight:600}
+.updnote .stamp{font-family:"IBM Plex Mono",monospace; font-size:10.5px; letter-spacing:.09em;
+  text-transform:uppercase; color:var(--ink3); display:block; margin-bottom:5px}
 
 /* ---- table ---- */
 .tbar{display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin:0 0 14px}
@@ -257,7 +277,13 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
   .root .nm{font-size:9.4pt} .root .ch{font-size:6.6pt} .root .og b{font-size:16pt} .root .og em{font-size:6.2pt}
   .root .tot{font-size:7.6pt}
   .root.on{box-shadow:none; background:var(--surface)}
-  .flag{break-inside:avoid; padding:9pt 12pt}
+  .flags{background:transparent; border:0; border-radius:0; gap:0; overflow:visible}
+  .flag{break-inside:avoid; padding:9pt 12pt; border:1px solid var(--line); border-radius:3px; margin-bottom:5pt}
+  .fstat{font-size:6.2pt; padding:2pt 4.5pt; margin-right:6pt}
+  .flag .fres{font-size:8.4pt; max-width:none; padding-left:9pt}
+  .flag .spec{font-size:7.4pt; padding:5pt 7pt; max-width:none}
+  .flag .src{font-size:6.8pt}
+  .updnote{font-size:8.4pt; padding:8pt 11pt; max-width:none; break-inside:avoid}
   .flag .q{font-size:9.4pt} .flag .a{font-size:8.4pt; max-width:none} .flag .lines{font-size:7.2pt}
   .tscroll{overflow:visible; border:0; border-radius:0}
   table{min-width:0; width:100%}
@@ -281,15 +307,22 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
   .lrow .pc{grid-column:2} .lrow .ds{grid-column:1/-1}
 }
 </style>
-</head>
-<body>
-
 
 <div class="wrap">
 
   <div class="eyebrow">Kinetic Platform · Master Deliverables</div>
   <h1>Originals &amp; Versioning</h1>
   <p class="lede">The 430-line master list is one <b>86-line asset matrix repeated verbatim across five campaigns</b> — the five blocks are structurally identical, so campaign is itself the outermost versioning layer. Inside those 86 lines sit <b>nine creative roots</b>. Everything else is a reframe, a copy swap, another render, a cutdown, or a duplicate.</p>
+
+  <div class="updnote">
+    <span class="stamp">Updated 18 Sep 2026 · Q4 brief + asset matrix</span>
+    The social and digital team's Q4 creative brief and asset matrix answer <b>six of the nine open questions below</b> and add
+    <b>six things that appear nowhere in the 430-line list</b> — Reddit, carousel, video-views retargeting, UGC, quantified copy
+    volume and per-placement legal disclaimers. Those documents cover <b>Connected Holiday and Black Friday only</b>; New Year
+    Fresh Start, Game Day and Moving Day have no brief yet. <b>The counts and classifications on this page still follow the
+    client's 430-line list</b> so the two documents reconcile line for line — where the Q4 spec differs, the delta is stated in
+    the question below rather than folded into the math.
+  </div>
 
   <div class="campshdr">
     <h2>Five campaign flights</h2>
@@ -304,10 +337,10 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
         <button data-v="all" aria-pressed="false">All five · 430 lines</button>
       </span>
     </label>
-    <label class="ctl"><span>Native ad images — unresolved</span>
+    <label class="ctl"><span>Native ad images — resolved 9/18</span>
       <span class="seg" id="segNative">
-        <button data-v="lo" aria-pressed="true">4 images, 2 crops</button>
-        <button data-v="hi" aria-pressed="false">8 distinct images</button>
+        <button data-v="lo" aria-pressed="true" title="Confirmed by the Q4 brief: four images per version, cropped to 1200x628 and 1200x1200.">4 images, 2 crops · confirmed</button>
+        <button data-v="hi" aria-pressed="false" title="The earlier reading, kept for reference.">8 distinct images</button>
       </span>
     </label>
     <label class="ctl"><span>Static version</span>
@@ -345,42 +378,141 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
 
   <section>
     <h2>What has to be resolved</h2>
-    <p class="h2sub">Line counts are per campaign — multiply by five for the full matrix.</p>
+    <p class="h2sub">Line counts are per campaign — multiply by five for the full matrix. Status as of the Q4 brief and asset matrix, 18 Sep: six resolved, one partly, two still open.</p>
     <div class="flags">
       <div class="flag">
-        <div class="q">Only three lines in the entire matrix are confirmed</div>
+        <div class="q"><span class="fstat open">Still open</span>Only three lines in the entire matrix are confirmed</div>
         <div class="lines">83 of 86 open</div>
         <div class="a">The :30 CTV hero, the :15 cutdown and the :30 radio spot are marked CONFIRMED. Everything else is TO CONFIRM or EXPECTED / CONFIRM. This is a scoping hypothesis, not a scope — the version counts below move with every answer.</div>
+        <div class="fres"><b>Better, not closed.</b> For Connected Holiday and Black Friday the ambiguity is largely gone — those are real specs from the team that owns them. But nothing is formally confirmed, the two Q4 documents disagree with each other in places, and three creatives have no brief at all.
+          <span class="src">Q4 brief pp. 4–23 · Asset matrix</span></div>
       </div>
       <div class="flag">
-        <div class="q">Are the eight native ad images eight images, or four cropped twice?</div>
+        <div class="q"><span class="fstat ok">Resolved</span>Are the eight native ad images eight images, or four cropped twice?</div>
         <div class="lines">4 lines · swings 4 originals</div>
         <div class="a">Images 1–4 are listed at 1200x628 and images 5–8 at 1200x1200. The source says "TOTAL: 8 images" with no size split stated. Toggle the control above to see both readings. Campaign-wide this is the difference between 60 and 80 originals.</div>
+        <div class="fres"><b>Four, cropped twice.</b> Native is specified identically across all three tracks, so the lower reading is the right one and the control above is now set to it.
+          <div class="spec">4 images (lifestyle, no copy overlay) at 1200x628 and 1200x1200<br>5 headlines (30c) · 1 long headline (90c) · 5 descriptions (90c)</div>
+          <b>But it is four images per version.</b> Connected Holiday runs Tier 2 and Tier 3, so Holiday alone needs 8; Black Friday 4; YouTube TV 4.
+          <span class="src">Q4 brief pp. 9, 16, 22</span></div>
       </div>
       <div class="flag">
-        <div class="q">Performance Max images are each listed at exactly one aspect ratio</div>
+        <div class="q"><span class="fstat ok">Resolved</span>Performance Max images are each listed at exactly one aspect ratio</div>
         <div class="lines">4 lines</div>
         <div class="a">PMax ingests every image across ratios; four images at one ratio each is not a deliverable set. Either the ratio coverage was flattened out of the source or the asset count is wrong. Resolve before this block is priced.</div>
+        <div class="fres"><b>The original list was wrong, as suspected.</b> PMax is six images per version across three ratios, not four at one apiece.
+          <div class="spec">4 images at 1200x628 + 1200x1200 · 2 images at 960x1200<br>4 headlines (30c) · 5 long headlines (90c) · 4 descriptions (90c)</div>
+          <span class="src">Q4 brief pp. 8, 16</span></div>
       </div>
       <div class="flag">
-        <div class="q">YTTV offer assets are duplicated across Tier 2 and Tier 3</div>
+        <div class="q"><span class="fstat part">Partly</span>YTTV offer assets are duplicated across Tier 2 and Tier 3</div>
         <div class="lines">8 lines</div>
         <div class="a">The source states YTTV assets are shared across tiers, yet Tier 2 and Tier 3 each carry a full set. The Tier 3 lines are the same files. Same pattern on price-point statics, which appear under both Traffic and Conversion Prospecting.</div>
+        <div class="fres"><b>Moot rather than answered.</b> YouTube TV is now its own no-pricing track, so it no longer splits by tier and the duplication disappears. But it has grown from a shared social asset into a full track with its own native ads, banners and Meta assets — so the line went away and a larger one took its place.
+          <span class="src">Q4 brief pp. 21–23 · Matrix, YTV column</span></div>
       </div>
       <div class="flag">
-        <div class="q">Demand Gen 16:9 video is spec-identical to the CTV master and cutdown</div>
+        <div class="q"><span class="fstat ok">Resolved</span>Demand Gen 16:9 video is spec-identical to the CTV master and cutdown</div>
         <div class="lines">2 lines</div>
         <div class="a">:30 16:9 1920x1080 and :15 16:9 1920x1080 already exist as the hero and the cutdown. These are trafficking destinations, not deliverables — unless Demand Gen requires its own creative, which the source does not say.</div>
+        <div class="fres"><b>Confirmed as a repurpose, explicitly. No new video creative</b> — but new copy and two extra reframes.
+          <div class="spec">Use CTV :15 / :30 — deliver 1920x1080, 1080x1920, 1080x1080<br>5 headlines (40c) · 5 long headlines (90c) · 5 descriptions</div>
+          <span class="src">Q4 brief p. 4 · Matrix: "repurpose :15 and :30 CTV"</span></div>
       </div>
       <div class="flag">
-        <div class="q">Source quantities contradict the line counts in three blocks</div>
+        <div class="q"><span class="fstat ok">Resolved</span>Source quantities contradict the line counts in three blocks</div>
         <div class="lines">HTML5 · Native · Cart</div>
         <div class="a">HTML5: three messaging ads listed, four versions stated, two versions per messaging. Single Image Demand Gen: three messages and four sizes listed, six images total stated. Cart: "3 TOTAL ADS" stated against six listed lines. Each needs a count and a mapping before build.</div>
+        <div class="fres"><b>All three now carry explicit counts.</b>
+          <div class="spec">HTML5 — 2 animated banners per track at 300x250, 728x90, 320x50, 160x600, 300x600<br>Single Image DG — 3 images per version at 1200x628, 1200x1200, 960x1200, 1080x1920<br>Cart retargeting — 1 GIF + 1 static per tier at 4x5 and 9x16</div>
+          <b>HTML5 is materially smaller than we had it</b> — two versions per track, not four, which takes the biggest single block in the matrix down.
+          <span class="src">Q4 brief pp. 7, 10, 16, 17, 22</span></div>
       </div>
       <div class="flag">
-        <div class="q">Two originals may be zero net work</div>
+        <div class="q"><span class="fstat ok">Resolved</span>Whether both :15 and :30 are required</div>
+        <div class="lines">CTV · OLV</div>
+        <div class="a">The matrix carried the cutdown as expected rather than confirmed, which left the edit and finish count for the hero film open.</div>
+        <div class="fres"><b>Both, for both creatives, on CTV and OLV.</b>
+          <div class="spec">CTV — Holiday Connected 1x:30 + 1x:15 · Black Friday 1x:30 + 1x:15 · 1920x1080</div>
+          <span class="src">Q4 brief p. 4 · Matrix, Traffic sheet</span></div>
+      </div>
+      <div class="flag">
+        <div class="q"><span class="fstat ok">Resolved</span>Aspect ratio coverage across the matrix</div>
+        <div class="lines">41 of 86 lines</div>
+        <div class="a">Ratio work is the largest single class in the breakdown, and the source stated sizes inconsistently from channel to channel — which made the versioning estimate the softest number on this page.</div>
+        <div class="fres"><b>Every channel now carries explicit sizes.</b> This was the single largest source of uncertainty in the classification.
+          <div class="spec">Seedtag display 587x330, 350x525, 587x100, 350x80 · Figma/PSD ≤4MB<br>Seedtag OLV 1920x1080 · MP4/MOV ≤4MB · 5–60s, 10s recommended<br>Meta 4x5 and 9x16 · Reddit 1200x1200 and 1440x1080</div>
+          <span class="src">Q4 brief pp. 4, 11, 18 and throughout</span></div>
+      </div>
+      <div class="flag">
+        <div class="q"><span class="fstat open">Still open</span>Two originals may be zero net work</div>
         <div class="lines">2 lines</div>
         <div class="a">The YTTV sitelink copy is noted as repurposable from PMax, and the radio spot may derive from the film's audio bed rather than an independent write and mix. Confirm both — they are counted as originals here.</div>
+        <div class="fres"><b>Neither document mentions them at all</b> — zero occurrences of "radio", "search" or "sitelink" across 49 brief pages and the full matrix. The original list marks a :30 radio spot and non-brand sitelinks per creative as confirmed. Either they are out of Q4 scope, or they sit with a different team and never reached this brief. Worth an explicit answer rather than an assumption in either direction.
+          <span class="src">Q4 brief · Asset matrix</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>What Q4 adds that the list does not have</h2>
+    <p class="h2sub">None of this appears anywhere in the 430-line master deliverables. This is the part worth taking to a scope conversation — the brief grew the job more than it shrank it.</p>
+    <div class="flags">
+      <div class="flag">
+        <div class="q"><span class="fstat new">New channel</span>Reddit</div>
+        <div class="lines">Holiday · Black Friday</div>
+        <div class="a">An entire channel absent from the master list. Four defined audiences — high intent, competitor-focused, gaming, new audience — plus a fifth marked TBD, each taking a static and a carousel, for both creatives.
+          <div class="spec">1x static + 1x carousel per audience · 1200x1200 (1:1) and 1440x1080 (4:3)<br>JPG / PNG / GIF · MP4 or MOV · GIF 3–10s</div>
+        </div>
+      </div>
+      <div class="flag">
+        <div class="q"><span class="fstat new">New format</span>Carousel</div>
+        <div class="lines">frame count unspecified</div>
+        <div class="a">Reddit only, and a format the master list has no row for anywhere. Frame count per carousel is not specified — that alone could swing the asset count meaningfully.</div>
+      </div>
+      <div class="flag">
+        <div class="q"><span class="fstat new">New audience</span>Retargeting — video views</div>
+        <div class="lines">both creatives</div>
+        <div class="a">A second retargeting segment alongside cart abandoners, on both Holiday and Black Friday, with its own creative and copy. The master list only had cart.
+          <div class="spec">1x UGC + 1x GIF + 2x static per tier · 4x5 and 9x16</div>
+        </div>
+      </div>
+      <div class="flag">
+        <div class="q"><span class="fstat new">New — not ours</span>UGC</div>
+        <div class="lines">Meta conversion · video views</div>
+        <div class="a">Appears on Meta conversion and video-views retargeting, marked "Kinetic to create." Reads as client-produced and therefore outside the Versus build — worth confirming in writing, because it is the kind of line that quietly lands back on us in week three.</div>
+      </div>
+      <div class="flag">
+        <div class="q"><span class="fstat new">New weight</span>Copy volume, now quantified</div>
+        <div class="lines">every display asset</div>
+        <div class="a">Every display asset carries a specified copy load the master list never counted — headlines at 30c and 40c, long headlines at 90c, descriptions at 60c and 90c, Meta headlines and body copy in pairs per tier. Across PMax, native, demand gen, single image, banners and social this is a substantial copywriting scope that has never been sized.</div>
+      </div>
+      <div class="flag">
+        <div class="q"><span class="fstat new">New requirement</span>Legal disclaimers, per ad type</div>
+        <div class="lines">every static</div>
+        <div class="a">Specific disclaimer text that differs by offer and by placement, set on the graphic for programmatic and demand gen, with a note that legal has recently been requiring "(select plans)" beneath the offer. This is a design constraint on every static and needs to land before artwork, and before legal review.</div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <h2>Blocking before anything is priced</h2>
+    <p class="h2sub">Three of the nine questions the Q4 documents raise are load-bearing. The rest are in the reconciliation.</p>
+    <div class="flags">
+      <div class="flag">
+        <div class="q"><span class="fstat open">Blocking</span>Seedtag is in the brief but missing from the asset matrix</div>
+        <div class="lines">5 lines per creative</div>
+        <div class="a">The brief gives Seedtag full specs — four display sizes and an OLV video. The asset matrix does not list Seedtag in any row of any sheet. One of the two documents is wrong, and it is five deliverables per creative either way.</div>
+      </div>
+      <div class="flag">
+        <div class="q"><span class="fstat open">Blocking</span>Is Demand Gen one video or two?</div>
+        <div class="lines">3 vs 6 deliverables</div>
+        <div class="a">The matrix says "YouTube DG: 1 videos." The brief says use the CTV :15 <b>and</b> :30. At three ratios each, that is the difference between three deliverables and six.</div>
+      </div>
+      <div class="flag">
+        <div class="q"><span class="fstat open">Blocking</span>A size looks dropped from the PMax and native specs</div>
+        <div class="lines">PMax · native</div>
+        <div class="a">Both read "(1200x628, 1200x1200,)" — with a trailing comma, in every instance, across all three tracks. Either a third size was deleted or the list is incomplete. It repeats too consistently to be a one-off typo.</div>
       </div>
     </div>
   </section>
@@ -404,7 +536,7 @@ footer{margin-top:56px; padding-top:20px; border-top:1px solid var(--line); colo
   </section>
 
   <footer>
-    Classification derived from <span class="mono">UPDATED Master Deliverables</span> (430 populated rows, 455 blank). Lifestyle imagery is modelled as one shared library feeding Demand Gen, Performance Max and native, per the source note that images may be reused between messages. Native ad image count deliberately left open; both readings are tabled above.
+    Classification derived from <span class="mono">UPDATED Master Deliverables</span> (430 populated rows, 455 blank). Question status, added scope and blocking items reconciled against <span class="mono">Kinetic Q4 Digital Media Creative Brief — Holiday / BF</span> (49 pages) and <span class="mono">Comms Framework Q4 Asset Matrix</span> on 18 Sep 2026; those documents cover Connected Holiday and Black Friday only. Counts on this page remain as the master list states them so the two documents reconcile line for line. Lifestyle imagery is modelled as one shared library feeding Demand Gen, Performance Max and native, per the source note that images may be reused between messages. Native ad image count deliberately left open; both readings are tabled above.
   </footer>
 </div>
 
